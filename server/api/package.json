@@ -1,0 +1,30 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "~1.17.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "ejs": "^2.5.7",
+    "express": "~4.15.2",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "expect": "^22.4.3",
+    "mocha": "^5.1.0",
+    "sinon": "^4.5.0",
+    "sinon-stub-promise": "^4.0.0",
+    "supersamples": "^1.4.0",
+    "supertest": "^3.0.0"
+  }
+}
