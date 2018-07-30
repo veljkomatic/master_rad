@@ -4,6 +4,7 @@ const routes = {
 	REGISTER: { name: 'register', url: '/register', consume: 'registerResponse' },
 	FORGOT: { name: 'forgot', url: '/forgot', consume: 'forgotResponse' },
 	RESET: { name: 'reset', url: '/reset', consume: 'resetResponse'},
+	SEND_VERIFY_EMAIL: { name: 'verify_email', url: '/verify_email', consume: 'sendVerifyEmailResponse' },
 	VERIFY_EMAIL: { name: 'verify_email', url: '/verify_email', consume: 'verifyEmailResponse' }
 };
 

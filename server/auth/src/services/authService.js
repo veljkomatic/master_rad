@@ -1,11 +1,13 @@
-const User = require('../models/User');
-const errorCode = require('../utils/errorCodes');
-const mailService = require('./mailService');
+
 const bcrypt = require('bcrypt');
 const sha256 = require('sha256');
 const randtoken = require('rand-token') 
 
+const User = require('../models/User');
+const errorCode = require('../utils/errorCodes');
+const mailService = require('./mailService');
 const keys = require('../config/keys');
+const sanitize = require('./sanitizing');
 
 const generateAuthToken = async (user) => {
 	const token = jwt.sign({ _id: user._id }, keys.secret, {
@@ -13,17 +15,18 @@ const generateAuthToken = async (user) => {
 	});
 	const refreshToken = randtoken.uid(256);
 	user.services.refreshToken = refreshToken;
-	await user.save();
+	const updatedUser = await user.save();
+	const sanitizedUser = sanitize.sanitizeUser(updatedUser);
 	return  {
 		token,
 		refreshToken,
-		user
+		user: sanitizedUser
 	}
 };
 
 module.exports = {
-	loginPost: async (req) => {
-		const { email, password } = req.body;
+	loginPost: async (ctx) => {
+		const { email, password } = ctx;
 		const hashedPassword = sha256(password);
 		const user = await User.find({ "email.address": email });
 		if (!user) {
@@ -38,24 +41,24 @@ module.exports = {
 		}
 		return generateAuthToken(user);
 	},
-	forgotPost: async (req) => {
-		const { email } = req.body;
+	forgotPost: async (ctx) => {
+		const { email } = ctx;
 		const user = await User.find({ "email.address": email });
 		if (!user) {
 			throw errorCode.USER_NOT_EXISTS;
 		}
 		return mailService.sendForgotPasswordEmail(user);
 	},
-	resetPost: async (req) => {
-		const userId = req.userId;
-		const { password } = req.body;
+	resetPost: async (ctx) => {
+		const { password, userId } = ctx;
 		const hashedPassword = bcrypt.hashSync(sha256(password), 10);
 		const user = await User.find({ _id: userId });
 		user.services.password.bcrypt = hashedPassword;
-		return user.save();
+		const updatedUser = await user.save();
+		return sanitize.sanitizeUser(updatedUser);
 	},
-	registerPost: async (req) => {
-		const { email, firstName, lastName, password } = req.body;
+	registerPost: async (ctx) => {
+		const { email, firstName, lastName, password } = ctx;
 		const oldUser = await User.find({ "email.address": email });
 		if (oldUser) {
 			throw errorCode.REGISTER_USER_EXISTS;
@@ -72,16 +75,19 @@ module.exports = {
 			}
         });
 		const newUser = await userToSave.save();
-		mailService.sendVerifyEmail(req.user);
-		return newUser;
+		mailService.sendVerifyEmail(newUser);
+		return sanitize.sanitizeUser(newUser);
 	},
-	verifyEmailPost: (req) => {
-		return mailService.sendVerifyEmail(req.user);
+	verifyEmailPost: (ctx) => {
+		const { email } = ctx;
+		const user = await User.find({ "email.address": email });
+		return mailService.sendVerifyEmail(user);
 	},
-	verifyEmailGet: async (req) => {
-		const userId = req.userId;
+	verifyEmailGet: async (ctx) => {
+		const userId = ctx.userId;
 		const user = await User.find({ _id: userId });
 		user.email.verified = true;
-		return user.save();
+		const updatedUser = await user.save();
+		return sanitize.sanitizeUser(updatedUser);
 	}
 };

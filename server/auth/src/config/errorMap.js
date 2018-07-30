@@ -1,5 +1,6 @@
-const e = require('../utils/errorCodes.js');
 const logger = require('winston');
+
+const errorCodes = require('../utils/errorCodes');
 
 module.exports = (err) => {
 	if (!err) {
@@ -10,7 +11,7 @@ module.exports = (err) => {
 			const additionalInfo = { httpStatus: 400, message: err.message };
 			return additionalInfo;
 		}
-		return e.GENERAL_ERROR;
+		return errorCodes.GENERAL_ERROR;
 	}
 	return err;
 };
