@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
-import Map from './Components/Map';
+import * as screens from './Components/screens';
 
 const Router = () => (
   <BrowserRouter>
     <Route 
       path='/'
-      component={Map} />
+      component={screens.Login} />
   </BrowserRouter>
 );
 
