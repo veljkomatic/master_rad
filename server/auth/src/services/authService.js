@@ -30,7 +30,7 @@ module.exports = {
 			throw errorCode.USER_NOT_EXISTS;
 		}
 		if (!user.email.verified) {
-			throw 
+			throw errorCode.USER_NOT_EXISTS;
 		}
 		const difference = await bcrypt.compare(hashedPassword, user.services.password.bcrypt);
 		if (!difference) {
@@ -46,7 +46,7 @@ module.exports = {
 		}
 		return mailService.sendForgotPasswordEmail(user);
 	},
-	resetPost: (req) => {
+	resetPost: async (req) => {
 		const userId = req.userId;
 		const { password } = req.body;
 		const hashedPassword = bcrypt.hashSync(sha256(password), 10);

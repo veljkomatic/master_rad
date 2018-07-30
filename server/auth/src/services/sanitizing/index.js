@@ -32,7 +32,7 @@ const checkLastName = (lastName) => {
 };
 
 module.exports = {
-	forgotPassword: (req, res, next) => {
+	forgotPassword: ( req ) => {
 		const { email } = req.body;
 		checkEmail(email);
 		req.body = {
