@@ -7,17 +7,25 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/mocha/bin/mocha --compilers js:babel-core/register --recursive  tests",
+    "start": "./scripts/dev.sh"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "~1.17.1",
+    "@google/maps": "^0.5.5",
+    "amqplib": "^0.5.2",
+    "body-parser": "^1.17.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
+    "decode-google-map-polyline": "^1.0.1",
     "ejs": "^2.5.7",
-    "express": "~4.15.2",
-    "winston": "^2.3.1"
+    "express": "^4.15.5",
+    "fast-csv": "^2.4.1",
+    "redis": "^2.8.0",
+    "uniqid": "^5.0.3",
+    "util.promisify": "^1.0.0",
+    "winston": "^2.4.3"
   },
   "devDependencies": {
     "expect": "^22.4.3",

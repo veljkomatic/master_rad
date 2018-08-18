@@ -32,53 +32,49 @@ const checkLastName = (lastName) => {
 };
 
 module.exports = {
-	forgotPassword: (req, res, next) => {
-		const { email } = req.body;
+	forgotPassword: (data) => {
+		const { email } = data;
 		checkEmail(email);
-		req.body = {
+		return {
 			email: email && email.toLowerCase()
 		};
-		next();
 	},
-	login: (req, res, next) => {
-		const { email, password } = req.body;
+	login: (data) => {
+		const { email, password } = data;
 		checkEmail(email);
 		checkPassword(password);
-		req.body = {
+		return {
 			email: email && email.toLowerCase(),
 			password: password
 		};
-		next();
 	},
-	register: (req, res, next) => {
+	register: (data) => {
 		const {
 			firstName, lastName, email, password
-		} = req.body;
+		} = data;
 		checkEmail(email);
 		checkPassword(password);
 		checkFirstName(firstName);
 		checkLastName(lastName);
-		req.body = {
+		return {
 			firstName: firstName,
 			lastName: lastName,
 			email: email && email.toLowerCase(),
 			password: password
 		};
-		next();
 	},
-	resetPassword: (req, res, next) => {
-		const { password, password_again } = req.body;
+	resetPassword: (data) => {
+		const { password, password_again } = data;
 		checkPassword(password);
 		if (!password_again || password_again.length === 0) {
 			throw errorCode.PASSWORD_REPEAT;
 		} else if (password !== password_again) {
 			throw errorCode.PASSWORDS_DONT_MATCH;
 		}
-		req.body = {
+		return {
 			password: password && password.toString(),
 			password_again: password_again && password_again.toString()
 		};
-		next();
     },
     sanitizeUser: (user) => {
 		const sanitazed = {

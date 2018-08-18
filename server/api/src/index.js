@@ -1,7 +1,7 @@
-const app = require('./config/app');
+const httpServer = require('./config/app');
 
-const server = app.listen(process.env.SERVICE_PORT_ENV_NAME || 3000);
+const server = httpServer.listen(3000);
 
-server.on('listening', () =>
-	console.log(`Express application started ${process.env.SERVICE_PORT_ENV_NAME || 3000}`)
-);
+server.on('listening', async () => {
+    console.log('Application started 3000')
+});

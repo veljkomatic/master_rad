@@ -1,7 +1,5 @@
 const logger = require('winston');
 
-const errorCodes = require('../utils/errorCodes');
-
 module.exports = (err) => {
 	if (!err) {
 		return null;
@@ -11,7 +9,7 @@ module.exports = (err) => {
 			const additionalInfo = { httpStatus: 400, message: err.message };
 			return additionalInfo;
 		}
-		return errorCodes.GENERAL_ERROR;
+		return { httpStatus: 400, message: 'Bad request' };
 	}
 	return err;
 };
