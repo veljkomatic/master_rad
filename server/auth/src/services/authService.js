@@ -76,7 +76,7 @@ module.exports = {
         });
 		const newUser = await userToSave.save();
 		mailService.sendVerifyEmail(newUser);
-		return sanitize.sanitizeUser(newUser);
+		return true;
 	},
 	verifyEmailPost: (ctx) => {
 		const { email } = ctx;

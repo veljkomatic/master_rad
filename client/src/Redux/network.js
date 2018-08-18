@@ -5,7 +5,16 @@ const requestHeaders = {
 	'Content-Type': 'application/json'
 };
 
-const baseURL = ''
+const baseURL = 'http://localhost:3000'
+
+axios.interceptors.response.use((response) => response, (error) => {
+	if (error && error.response && error.response.status === 401) {
+		store.dispatch({ type: actionTypes.UNAUTHORIZED });
+		doLogout(store.dispatch, false);
+		throw error;
+	}
+	return error.response;
+});
 
 const fetch = async function (request) {
 

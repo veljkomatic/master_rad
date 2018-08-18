@@ -2,9 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-// const keys = require('./keys');
+const keys = require('./keys');
 
-// mongoose.connect(keys.mongoURI);
+mongoose.connect(keys.mongoURI);
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));

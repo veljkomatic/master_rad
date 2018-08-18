@@ -32,7 +32,7 @@ module.exports = ({ router, channel }) => {
 					const { error } = result; 
 					return res.status(error.httpStatus).send({ error: error.message });
 				}
-				res.send(result.data);
+				res.send();
 			});
 		} catch(e) {
 			next(e);
