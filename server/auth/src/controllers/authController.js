@@ -12,7 +12,7 @@ module.exports = async ({ channel }) => {
 			return channel.sendToQueue('loginResponse', Buffer.from(JSON.stringify(login), 'utf8'));
 		} catch(e) {
 			const error = errorMap(e);
-			return channel.sendToQueue('loginResponse', Buffer.from(JSON.stringify(error), 'utf8'));
+			return channel.sendToQueue('loginResponse', Buffer.from(JSON.stringify({ error }), 'utf8'));
 		}
 	});
 
@@ -24,7 +24,7 @@ module.exports = async ({ channel }) => {
 			return channel.sendToQueue('registerResponse', Buffer.from(JSON.stringify(registered), 'utf8'));
 		} catch(e) {
 			const error = errorMap(e);
-			return channel.sendToQueue('registerResponse', Buffer.from(JSON.stringify(error), 'utf8'));
+			return channel.sendToQueue('registerResponse', Buffer.from(JSON.stringify({ error }), 'utf8'));
 		}
 	});
 
@@ -36,7 +36,7 @@ module.exports = async ({ channel }) => {
 			return channel.sendToQueue('forgotResponse', Buffer.from(JSON.stringify(true), 'utf8'));
 		} catch(e) {
 			const error = errorMap(e);
-			return channel.sendToQueue('forgotResponse', Buffer.from(JSON.stringify(error), 'utf8'));
+			return channel.sendToQueue('forgotResponse', Buffer.from(JSON.stringify({ error }), 'utf8'));
 		}
 	});
 

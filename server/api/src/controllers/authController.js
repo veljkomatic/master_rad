@@ -9,7 +9,12 @@ module.exports = ({ router, channel }) => {
 			await channel.sendToQueue(LOGIN.name, Buffer.from(JSON.stringify(req.body), 'utf8'));
 			await channel.assertQueue(LOGIN.consume);
 			channel.consume(LOGIN.consume, (msg) => {
-				console.log(msg.content.toString());
+				const result = JSON.parse(msg.content);
+				if(result.error) {
+					const { error } = result; 
+					return res.status(error.httpStatus).send({ error: error.message });
+				}
+				res.send(result);
 			});
 		} catch(e) {
 			next(e);
@@ -22,7 +27,12 @@ module.exports = ({ router, channel }) => {
 			await channel.sendToQueue(REGISTER.name, Buffer.from(req.body, 'utf8'));
 			await channel.assertQueue(REGISTER.consume);
 			channel.consume(REGISTER.consume, (msg) => {
-				console.log(msg.content.toString());
+				const result = JSON.parse(msg.content);
+				if(result.error) {
+					const { error } = result; 
+					return res.status(error.httpStatus).send({ error: error.message });
+				}
+				res.send(result.data);
 			});
 		} catch(e) {
 			next(e);
@@ -35,7 +45,12 @@ module.exports = ({ router, channel }) => {
 			await channel.sendToQueue(FORGOT.name, Buffer.from(req.body, 'utf8'));
 			await channel.assertQueue(FORGOT.consume);
 			channel.consume(FORGOT.consume, (msg) => {
-				console.log(msg.content.toString());
+				const result = JSON.parse(msg.content);
+				if(result.error) {
+					const { error } = result; 
+					return res.status(error.httpStatus).send({ error: error.message });
+				}
+				res.send();
 			});
 		} catch(e) {
 			next(e);
@@ -48,7 +63,12 @@ module.exports = ({ router, channel }) => {
 			await channel.sendToQueue(RESET.name, Buffer.from(req.body, 'utf8'));
 			await channel.assertQueue(RESET.consume);
 			channel.consume(RESET.consume, (msg) => {
-				console.log(msg.content.toString());
+				const result = JSON.parse(msg.content);
+				if(result.error) {
+					const { error } = result; 
+					return res.status(error.httpStatus).send({ error: error.message });
+				}
+				res.send();
 			});
 		} catch(e) {
 			next(e);
@@ -61,7 +81,12 @@ module.exports = ({ router, channel }) => {
 			await channel.sendToQueue(VERIFY_EMAIL.name, Buffer.from(req.body, 'utf8'));
 			await channel.assertQueue(VERIFY_EMAIL.consume);
 			channel.consume(VERIFY_EMAIL.consume, (msg) => {
-				console.log(msg.content.toString());
+				const result = JSON.parse(msg.content);
+				if(result.error) {
+					const { error } = result; 
+					return res.status(error.httpStatus).send({ error: error.message });
+				}
+				res.send(result);
 			});
 		} catch(e) {
 			next(e);
@@ -74,7 +99,12 @@ module.exports = ({ router, channel }) => {
 			await channel.sendToQueue(SEND_VERIFY_EMAIL.name, Buffer.from(req.body, 'utf8'));
 			await channel.assertQueue(SEND_VERIFY_EMAIL.consume);
 			channel.consume(SEND_VERIFY_EMAIL.consume, (msg) => {
-				console.log(msg.content.toString());
+				const result = JSON.parse(msg.content);
+				if(result.error) {
+					const { error } = result; 
+					return res.status(error.httpStatus).send({ error: error.message });
+				}
+				res.send(result)
 			});
 		} catch(e) {
 			next(e);

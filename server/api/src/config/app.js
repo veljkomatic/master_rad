@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const httpServer = require('http');
+const socketIO = require('socket.io');
 const errorMap = require('./errorMap');
 
 const app = express();
@@ -14,6 +15,9 @@ app.use((err, req, res, next) => {
   res.status(e.httpStatus).send({ error: e.message });
 });
 
-require('../controllers')(app);
+const server = httpServer.Server(app);
+const io = socketIO.listen(httpServer)
 
-module.exports = app;
+require('../controllers')({ router: app, io });
+
+module.exports = server;
