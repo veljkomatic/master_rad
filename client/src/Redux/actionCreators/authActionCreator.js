@@ -1,4 +1,4 @@
-import actionTypes from './types';
+import { actionTypes } from './types';
 import Network from '../network';
 
 export const logoutUser = () => async (dispatch) => doLogout(dispatch);

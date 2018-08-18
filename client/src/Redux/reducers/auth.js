@@ -1,5 +1,5 @@
-import { REHYDRATE } from 'redux-persist/constants';
-import actionTypes from '../actionCreators/types';
+import { REHYDRATE } from 'redux-persist';
+import { actionTypes } from '../actionCreators/types';
 
 const INITIAL_STATE = {
 	user: {},

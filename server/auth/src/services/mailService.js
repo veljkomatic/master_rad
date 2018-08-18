@@ -29,7 +29,7 @@ module.exports = {
             'reset_password_email',
             {
                 resetURL: `${resetAddress}eal_sig=${token}`
-            },
+            }
         );
 	}
 };

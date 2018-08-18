@@ -1,4 +1,4 @@
-import actionTypes from '../actionCreators/types';
+import { actionTypes } from '../actionCreators/types';
 
 const INITIAL_STATE = {
 	missionsData: [],

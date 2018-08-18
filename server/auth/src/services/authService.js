@@ -78,7 +78,7 @@ module.exports = {
 		mailService.sendVerifyEmail(newUser);
 		return true;
 	},
-	verifyEmailPost: (ctx) => {
+	verifyEmailPost: async (ctx) => {
 		const { email } = ctx;
 		const user = await User.find({ "email.address": email });
 		return mailService.sendVerifyEmail(user);

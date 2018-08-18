@@ -4,10 +4,11 @@ const path = require('path');
 const uniqid = require('uniqid');
 const logger = require('winston');
 const redis = require("redis");
-const { promisify } = require('util');
+const util = require('util');
+require('util.promisify').shim();
 
 const client = redis.createClient();
-const getAsync = promisify(client.get).bind(client);
+const getAsync = util.promisify(client.get).bind(client);
 const externalServices = require('./externalServices');
 const mapper = require('./mappers/mapGoogleRoute');
 const validation = require('./validation/validator');
@@ -37,7 +38,7 @@ module.exports = {
             stream.pipe(csvStream);
         });
     },
-    findFinishedMissions: ({ channel }) => {
+    findFinishedMissions: async ({ channel }) => {
         logger.info('Missions Services - Find Finished Mission And Remove It From Active Missions');
         const data = await getAsync('activeMissions');
         const activeMissions = JSON.parse(data);
@@ -50,7 +51,7 @@ module.exports = {
         });
         client.set('activeMissions', JSON.stringify(newData), redis.print);
     },
-    findStartingMissons: ({ channel }) => {
+    findStartingMissons: async ({ channel }) => {
         logger.info('Missions Services - Find Starting Mission And Remove It From Data');
         const data = await getAsync('greenTaxiTripData');
         const greenTaxiTripData = JSON.parse(data);
