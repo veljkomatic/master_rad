@@ -1,8 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const redis = require("redis"),
+	client = redis.createClient();
+	
 const missionsServices = require('./services/missionsServices');
-let greenTaxiTripData;
 
 const app = express();
 
@@ -17,6 +18,8 @@ module.exports = app;
 
 const server = app.listen(process.env.SERVICE_PORT_ENV_NAME || 3010);
 
-server.on('listening', async () =>
+server.on('listening', async () => {
+	const greenTaxiTripData = await missionsServices.parseAndSortCsvFile();
+	client.set("greenTaxiTripData", JSON.stringify(greenTaxiTripData), redis.print);
 	console.log(`Express application started ${process.env.SERVICE_PORT_ENV_NAME || 3010}`)
-);
+});

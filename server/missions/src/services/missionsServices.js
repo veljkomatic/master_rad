@@ -3,15 +3,17 @@ const csv = require('fast-csv');
 const path = require('path');
 const uniqid = require('uniqid');
 const logger = require('winston');
+const redis = require("redis");
+const { promisify } = require('util');
 
+const client = redis.createClient();
+const getAsync = promisify(client.get).bind(client);
 const externalServices = require('./externalServices');
 const mapper = require('./mappers/mapGoogleRoute');
 const validation = require('./validation/validator');
 const sanitize = require('./sanitizing/sanitizeMission');
 
-const date = new Date('01/01/2016 06:00:00 AM');
-
-let activeMissions = [];
+const date = new Date('01/01/2017 12:00:00 AM');
 
 module.exports = {
     parseAndSortCsvFile: () => {
@@ -35,20 +37,29 @@ module.exports = {
             stream.pipe(csvStream);
         });
     },
-    findFinishedMissions: (ctx) => {
+    findFinishedMissions: () => {
         logger.info('Missions Services - Find Finished Mission And Remove It From Active Missions');
-        activeMissions = activeMissions.filter((el) => {
+        const data = await getAsync('activeMissions');
+        const activeMissions = JSON.parse(data);
+        const finishedMission = [];
+        newData = activeMissions.filter((el) => {
             const dropoffDate = new Date(el.Lpep_dropoff_datetime);
             if(dropoffDate.getTime() < date.getTime()) {
-                ctx.socket.emit('finishedMission', sanitize.sanitizeMissionResponse(el));
+                finishedMission.push(sanitize.sanitizeMissionResponse(el))
             }
             return dropoffDate.getTime() >= date.getTime();
         });
+        client.set('activeMissions', JSON.stringify(newData), redis.print);
+        return finishedMission
     },
-    findStartingMissons: (ctx) => {
+    findStartingMissons: () => {
         logger.info('Missions Services - Find Starting Mission And Remove It From Data');
+        const data = await getAsync('greenTaxiTripData');
+        const greenTaxiTripData = JSON.parse(data);
         date.setSeconds(date.getSeconds() + 1);
-        ctx.data = ctx.data.filter(async (el) => {
+        const newStartingMission = [];
+        const activeMissions = [];
+        const newData = greenTaxiTripData.filter(async (el) => {
             const pickupDate = new Date(el.lpep_pickup_datetime);
             if((pickupDate.getTime() === date.getTime()) && validation.validateMission(el)) {
                 const response = await externalServices.GoogleGetRoute(el.Pickup_latitude, el.Pickup_longitude, el.Dropoff_latitude, el.Dropoff_longitude);
@@ -61,10 +72,13 @@ module.exports = {
                         computeRoutes: googleRoute
                     }
                 );
-                ctx.socket.emit('newStartingMission', sanitize.sanitizeMissionResponse(startingMission));
+                newStartingMission.push(sanitize.sanitizeMissionResponse(startingMission));
                 activeMissions.push(startingMission);
             }
             return pickupDate.getTime() >= date.getTime()
         });
+        client.set('activeMissions', JSON.stringify(activeMissions), redis.print);
+        client.set('greenTaxiTripData', JSON.stringify(newData), redis.print);
+        return newStartingMission;
     }
 }

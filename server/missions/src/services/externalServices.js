@@ -1,6 +1,4 @@
-const request = require('request-promise');
 const googleMap = require('@google/maps');
-const polyline = require('polyline');
 const logger = require('winston');
 
 const keys = require('../config/keys');
