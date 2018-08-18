@@ -37,27 +37,24 @@ module.exports = {
             stream.pipe(csvStream);
         });
     },
-    findFinishedMissions: () => {
+    findFinishedMissions: ({ channel }) => {
         logger.info('Missions Services - Find Finished Mission And Remove It From Active Missions');
         const data = await getAsync('activeMissions');
         const activeMissions = JSON.parse(data);
-        const finishedMission = [];
         newData = activeMissions.filter((el) => {
             const dropoffDate = new Date(el.Lpep_dropoff_datetime);
             if(dropoffDate.getTime() < date.getTime()) {
-                finishedMission.push(sanitize.sanitizeMissionResponse(el))
+                channel.sendToQueue('finishedMission', Buffer.from(JSON.stringify(sanitize.sanitizeMissionResponse(el)), 'utf8'));
             }
             return dropoffDate.getTime() >= date.getTime();
         });
         client.set('activeMissions', JSON.stringify(newData), redis.print);
-        return finishedMission
     },
-    findStartingMissons: () => {
+    findStartingMissons: ({ channel }) => {
         logger.info('Missions Services - Find Starting Mission And Remove It From Data');
         const data = await getAsync('greenTaxiTripData');
         const greenTaxiTripData = JSON.parse(data);
         date.setSeconds(date.getSeconds() + 1);
-        const newStartingMission = [];
         const activeMissions = [];
         const newData = greenTaxiTripData.filter(async (el) => {
             const pickupDate = new Date(el.lpep_pickup_datetime);
@@ -72,13 +69,12 @@ module.exports = {
                         computeRoutes: googleRoute
                     }
                 );
-                newStartingMission.push(sanitize.sanitizeMissionResponse(startingMission));
+                channel.sendToQueue('startingMission', Buffer.from(JSON.stringify(sanitize.sanitizeMissionResponse(startingMission)), 'utf8'));
                 activeMissions.push(startingMission);
             }
             return pickupDate.getTime() >= date.getTime()
         });
         client.set('activeMissions', JSON.stringify(activeMissions), redis.print);
         client.set('greenTaxiTripData', JSON.stringify(newData), redis.print);
-        return newStartingMission;
     }
 }

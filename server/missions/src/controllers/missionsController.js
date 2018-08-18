@@ -2,11 +2,11 @@ const missionsServices = require('../services/missionsServices');
 
 module.exports = async ({ channel }) => {
 	channel.consume('missionsSubscribe', async (msg) => {
-		await channel.assertQueue('missionsPublish');
+		await channel.assertQueue('finishedMission');
+		await channel.assertQueue('startingMission');
 		setInterval(() => {
-			const startingMissions = missionsServices.findStartingMissons();
-			const finishedMissions = missionsServices.findFinishedMissions();
-			return channel.sendToQueue('missionsPublish', Buffer.from(JSON.stringify({ startingMissions, finishedMissions }), 'utf8'));
+			missionsServices.findStartingMissons({ channel });
+			missionsServices.findFinishedMissions({ channel });
 		}, 1000)
 	});
 };
