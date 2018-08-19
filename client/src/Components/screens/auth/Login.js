@@ -43,7 +43,6 @@ class Login extends PureComponent  {
                     <input className="Form__input" type="password" placeholder="Password" value={this.state.password} onChange={this.handlePassChange} />
                     <button className="Form__button" type="submit">Login</button>
                 </form>
-                <Link style={styles.link} to="/forgot">Forgot Password</Link>
                 <Link style={styles.link} to="/register">Don't have account ?</Link>
             </div>
         );

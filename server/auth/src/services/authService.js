@@ -5,7 +5,6 @@ const randtoken = require('rand-token')
 
 const User = require('../models/User');
 const errorCode = require('../utils/errorCodes');
-const mailService = require('./mailService');
 const keys = require('../config/keys');
 const sanitize = require('./sanitizing');
 
@@ -41,22 +40,6 @@ module.exports = {
 		}
 		return generateAuthToken(user);
 	},
-	forgotPost: async (ctx) => {
-		const { email } = ctx;
-		const user = await User.find({ "email.address": email });
-		if (!user) {
-			throw errorCode.USER_NOT_EXISTS;
-		}
-		return mailService.sendForgotPasswordEmail(user);
-	},
-	resetPost: async (ctx) => {
-		const { password, userId } = ctx;
-		const hashedPassword = bcrypt.hashSync(sha256(password), 10);
-		const user = await User.find({ _id: userId });
-		user.services.password.bcrypt = hashedPassword;
-		const updatedUser = await user.save();
-		return sanitize.sanitizeUser(updatedUser);
-	},
 	registerPost: async (ctx) => {
 		const { email, firstName, lastName, password } = ctx;
 		const oldUser = await User.find({ "email.address": email });
@@ -75,19 +58,6 @@ module.exports = {
 			}
         });
 		const newUser = await userToSave.save();
-		mailService.sendVerifyEmail(newUser);
-		return true;
-	},
-	verifyEmailPost: async (ctx) => {
-		const { email } = ctx;
-		const user = await User.find({ "email.address": email });
-		return mailService.sendVerifyEmail(user);
-	},
-	verifyEmailGet: async (ctx) => {
-		const userId = ctx.userId;
-		const user = await User.find({ _id: userId });
-		user.email.verified = true;
-		const updatedUser = await user.save();
-		return sanitize.sanitizeUser(updatedUser);
+		return generateAuthToken(newUser);
 	}
 };

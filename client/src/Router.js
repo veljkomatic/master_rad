@@ -13,9 +13,6 @@ const Router = () => (
       <Route
         path='/register'
         component={screens.Register} />
-      <Route 
-        path='/forgot'
-        component={screens.ForgotPassword} />
     </Switch>
 
   </BrowserRouter>

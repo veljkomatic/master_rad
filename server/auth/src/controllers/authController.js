@@ -1,7 +1,6 @@
 const authService = require('../services/authService');
 const sanatize = require('../services/sanitizing');
 const errorMap = require('../config/errorMap');
-const authentication = require('../services/authentication');
 
 module.exports = async ({ channel }) => {
 	channel.consume('login', async (msg) => {
@@ -25,58 +24,6 @@ module.exports = async ({ channel }) => {
 		} catch(e) {
 			const error = errorMap(e);
 			return channel.sendToQueue('registerResponse', Buffer.from(JSON.stringify({ error }), 'utf8'));
-		}
-	});
-
-	channel.consume('forgot', async (msg) => {
-		await channel.assertQueue('forgotResponse');
-		try {
-			const ctx = sanatize.forgotPassword(JSON.parse(msg.content));
-			await authService.forgotPost(ctx);
-			return channel.sendToQueue('forgotResponse', Buffer.from(JSON.stringify(true), 'utf8'));
-		} catch(e) {
-			const error = errorMap(e);
-			return channel.sendToQueue('forgotResponse', Buffer.from(JSON.stringify({ error }), 'utf8'));
-		}
-	});
-
-
-	channel.consume('reset', async (msg) => {
-		await channel.assertQueue('resetResponse');
-		try {
-			const ctx = sanatize.resetPassword(JSON.parse(msg.content));
-			await authentication.validResetToken(ctx);
-			await authService.resetPost(ctx);
-			return channel.sendToQueue('resetResponse', Buffer.from(JSON.stringify(true), 'utf8'));
-		} catch(e) {
-			const error = errorMap(e);
-			return channel.sendToQueue('resetResponse', Buffer.from(JSON.stringify(error), 'utf8'));
-		}
-	});
-
-
-	channel.consume('send_verify_email', async (msg) => {
-		await channel.assertQueue('sendVerifyEmailResponse');
-		try {
-			const ctx = JSON.parse(msg.content);
-			const result = await authService.verifyEmailPost(ctx);
-			return channel.sendToQueue('sendVerifyEmailResponse', Buffer.from(JSON.stringify(result), 'utf8'));
-		} catch(e) {
-			const error = errorMap(e);
-			return channel.sendToQueue('sendVerifyEmailResponse', Buffer.from(JSON.stringify(error), 'utf8'));
-		}
-	});
-
-	channel.consume('verify_email', async (msg) => {
-		await channel.assertQueue('verifyEmailResponse');
-		try {
-			const ctx = JSON.parse(msg.content);
-			await authentication.validVerifyToken(ctx);
-			const verifiedUser = await authService.verifyEmailGet(ctx);
-			return channel.sendToQueue('verifyEmailResponse', Buffer.from(JSON.stringify(verifiedUser), 'utf8'));
-		} catch(e) {
-			const error = errorMap(e);
-			return channel.sendToQueue('verifyEmailResponse', Buffer.from(JSON.stringify(error), 'utf8'));
 		}
 	});
 };

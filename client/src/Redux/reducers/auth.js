@@ -53,24 +53,6 @@ export default (state = INITIAL_STATE, action) => {
 				loading: false,
 				error: action.error
 			};
-		case actionTypes.SEND_RECOVERY_EMAIL:
-			return {
-				...state,
-				loading: true,
-				error: ''
-			};
-		case actionTypes.SEND_RECOVERY_EMAIL_FAIL:
-			return {
-				...state,
-				error: action.error,
-				loading: false,
-			};
-		case actionTypes.SEND_RECOVERY_EMAIL_SUCCESS:
-			return {
-				...state,
-				error: '',
-				loading: false
-			};
 		case actionTypes.LOGOUT_USER:
 			return {
 				...INITIAL_STATE,
@@ -84,27 +66,6 @@ export default (state = INITIAL_STATE, action) => {
 		case actionTypes.LOGOUT_USER_FAIL:
 			return {
 				...INITIAL_STATE,
-				loading: false
-			};
-		case actionTypes.VERIFY_EMAIL:
-			return {
-				...state,
-				error: '',
-				loading: true
-			};
-		case actionTypes.VERIFY_EMAIL_FAIL:
-			return {
-				...state,
-				error: action.error,
-				loading: false
-			};
-		case actionTypes.VERIFY_EMAIL_SUCCESS:
-			return {
-				...state,
-				user: {
-					...state.user,
-					verified: true
-				},
 				loading: false
 			};
 		default:
