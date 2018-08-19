@@ -32,13 +32,6 @@ const checkLastName = (lastName) => {
 };
 
 module.exports = {
-	forgotPassword: (data) => {
-		const { email } = data;
-		checkEmail(email);
-		return {
-			email: email && email.toLowerCase()
-		};
-	},
 	login: (data) => {
 		const { email, password } = data;
 		checkEmail(email);
@@ -63,19 +56,6 @@ module.exports = {
 			password: password
 		};
 	},
-	resetPassword: (data) => {
-		const { password, password_again } = data;
-		checkPassword(password);
-		if (!password_again || password_again.length === 0) {
-			throw errorCode.PASSWORD_REPEAT;
-		} else if (password !== password_again) {
-			throw errorCode.PASSWORDS_DONT_MATCH;
-		}
-		return {
-			password: password && password.toString(),
-			password_again: password_again && password_again.toString()
-		};
-    },
     sanitizeUser: (user) => {
 		const sanitazed = {
 			id: user._id,
