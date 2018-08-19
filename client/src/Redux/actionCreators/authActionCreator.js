@@ -34,14 +34,14 @@ export const loginUser = (email, password) => async (dispatch) => {
     });
     if (response.error) {
         return dispatch({
-            type: types.LOGIN_USER_FAIL,
+            type: actionTypes.LOGIN_USER_FAIL,
 			error: response.error
         });
     }
 	localStorage.setItem('authToken', response.data.token || '');
 	localStorage.setItem('refreshToken', response.data.refreshToken || '');
     dispatch({
-		type: types.LOGIN_USER_SUCCESS, 
+		type: actionTypes.LOGIN_USER_SUCCESS, 
 		payload: response.data.user
 	});
     return { response: response.data.user };
@@ -75,7 +75,7 @@ export const registerUser = (firstName, lastName, email, password) => async (dis
 	};
 };
 
-export const sendRecoveryEmail = (email, callback) => async (dispatch) => {
+export const sendRecoveryEmail = (email) => async (dispatch) => {
 	dispatch({
 		type: actionTypes.SEND_RECOVERY_EMAIL
 	});

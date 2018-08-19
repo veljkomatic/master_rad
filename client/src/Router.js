@@ -1,13 +1,23 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import * as screens from './Components/screens';
 
 const Router = () => (
   <BrowserRouter>
-    <Route 
-      path='/'
-      component={screens.Login} />
+    <Switch>
+        <Route
+        exact
+        path='/'
+        component={screens.Login} />
+      <Route
+        path='/register'
+        component={screens.Register} />
+      <Route 
+        path='/forgot'
+        component={screens.ForgotPassword} />
+    </Switch>
+
   </BrowserRouter>
 );
 

@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+import { doLogout }  from './actionCreators';
+import store from './store';
+
 const requestHeaders = {
 	Accept: 'application/json',
 	'Content-Type': 'application/json'
@@ -9,7 +12,6 @@ const baseURL = 'http://localhost:3000'
 
 axios.interceptors.response.use((response) => response, (error) => {
 	if (error && error.response && error.response.status === 401) {
-		store.dispatch({ type: actionTypes.UNAUTHORIZED });
 		doLogout(store.dispatch, false);
 		throw error;
 	}

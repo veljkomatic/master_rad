@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import { subscribeToMissions } from '../Redux/actionCreators';
+import { subscribeToMissions } from '../../../Redux/actionCreators';
 
 class Map extends PureComponent  {
 
