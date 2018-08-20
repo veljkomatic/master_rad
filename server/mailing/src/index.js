@@ -1,7 +1,7 @@
 const app = require('./config/app');
 
-const server = app.listen(process.env.SERVICE_PORT_ENV_NAME || 3010);
+const server = app.listen(3300);
 
 server.on('listening', () =>
-	console.log(`Express application started ${process.env.SERVICE_PORT_ENV_NAME || 3010}`)
+	console.log(`Express application started 3300`)
 );

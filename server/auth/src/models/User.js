@@ -2,19 +2,7 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const emailSchema = new Schema({
-    address: {
-        type: String,
-        required: true
-    },
-    verified: {
-        type: Boolean,
-        required: true,
-        default: false
-    }
-})
-
-const issueSchema = new Schema({
+const userSchema = new Schema({
     firstName: {
         type: String,
         required: true
@@ -24,7 +12,7 @@ const issueSchema = new Schema({
         required: true
     },
     email: {
-        type: emailSchema,
+        type: String,
         required: true
     },
     services: {
@@ -37,6 +25,6 @@ const issueSchema = new Schema({
     }
 });
 
-const User = mongoose.model('User', issueSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

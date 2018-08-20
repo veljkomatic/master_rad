@@ -1,4 +1,3 @@
-import { REHYDRATE } from 'redux-persist';
 import { actionTypes } from '../actionCreators/types';
 
 const INITIAL_STATE = {
@@ -9,13 +8,6 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case REHYDRATE: {
-			return {
-				user: (action.payload.auth && action.payload.auth.user) || {},
-				error: '',
-				loading: false
-			} || [];
-		}
 		case actionTypes.LOGIN_USER:
 			return {
 				...state,

@@ -11,8 +11,13 @@ const Router = () => (
         path='/'
         component={screens.Login} />
       <Route
+        exact
         path='/register'
         component={screens.Register} />
+      <Route
+        exact
+        path='/map'
+        component={screens.Map} />
     </Switch>
 
   </BrowserRouter>

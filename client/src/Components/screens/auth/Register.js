@@ -19,10 +19,10 @@ class Register extends PureComponent  {
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
     
-    handleSubmit() {
+    handleSubmit = (event) => {
+        event.preventDefault();
         const { firstName, lastName, email, password } = this.state;
         this.props.registerUser(firstName, lastName, email, password);
     }
@@ -55,10 +55,10 @@ class Register extends PureComponent  {
         return(
             <div>
                 <form className="Form" onSubmit={this.handleSubmit}>
-                    <input className="Form__input" type="text" placeholder="First Name" ref={(firstName) => this.firstName = firstName } />
-                    <input className="Form__input" type="text" placeholder="Last Name" ref={(lastName) => this.lastName = lastName } />
-                    <input className="Form__input" type="text" placeholder="Email" ref={(email) => this.email = email } />
-                    <input className="Form__input" type="text" placeholder="Password" ref={(password) => this.password = password } />
+                    <input className="Form__input" type="text" placeholder="First Name" value={this.state.firstName} onChange={this.handleFirstNameChange}  />
+                    <input className="Form__input" type="text" placeholder="Last Name" value={this.state.lastName} onChange={this.handleLastNameChange}  />
+                    <input className="Form__input" type="text" placeholder="Email" value={this.state.email} onChange={this.handleEmailChange}  />
+                    <input className="Form__input" type="password" placeholder="Password" value={this.state.password} onChange={this.handlePassChange} />
                     <button className="Form__button" type="submit">Register</button>
                 </form>
                 <Link style={styles.link} to="/">Already have account ?</Link>

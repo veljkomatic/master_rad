@@ -1,7 +1,8 @@
 
 const bcrypt = require('bcrypt');
 const sha256 = require('sha256');
-const randtoken = require('rand-token') 
+const randtoken = require('rand-token');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 const errorCode = require('../utils/errorCodes');
@@ -27,7 +28,7 @@ module.exports = {
 	loginPost: async (ctx) => {
 		const { email, password } = ctx;
 		const hashedPassword = sha256(password);
-		const user = await User.find({ "email.address": email });
+		const user = await User.findOne({ email });
 		if (!user) {
 			throw errorCode.USER_NOT_EXISTS;
 		}
@@ -42,7 +43,7 @@ module.exports = {
 	},
 	registerPost: async (ctx) => {
 		const { email, firstName, lastName, password } = ctx;
-		const oldUser = await User.find({ "email.address": email });
+		const oldUser = await User.findOne({ email });
 		if (oldUser) {
 			throw errorCode.REGISTER_USER_EXISTS;
 		}

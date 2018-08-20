@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 
 const keys = require('./keys');
 
-mongoose.connect(keys.mongoURI);
+mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));

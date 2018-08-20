@@ -2,11 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const httpServer = require('http');
 const socketIO = require('socket.io');
+const cors = require('cors');
+
 const errorMap = require('./errorMap');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors('*'));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 

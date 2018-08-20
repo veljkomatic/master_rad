@@ -8,7 +8,7 @@ const requestHeaders = {
 	'Content-Type': 'application/json'
 };
 
-const baseURL = 'http://localhost:3000'
+const baseURL = 'http://localhost:3100'
 
 axios.interceptors.response.use((response) => response, (error) => {
 	if (error && error.response && error.response.status === 401) {
@@ -37,20 +37,10 @@ const fetch = async function (request) {
 };
 
 class Network {
-
-	static get(params = {}) {
+	static post({ data, params = {}, url }) {
 		const request = {
-			url: baseURL,
-			method: 'GET',
-			headers: requestHeaders,
-			params
-		};
-		return fetch(request);
-	}
-
-	static post({ data, params = {} }) {
-		const request = {
-			url: baseURL,
+			baseURL,
+			url,
 			method: 'POST',
 			headers: requestHeaders,
 			params,

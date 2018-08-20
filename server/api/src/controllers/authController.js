@@ -24,7 +24,7 @@ module.exports = ({ router, channel }) => {
 	router.post(REGISTER.url, async (req, res, next) => {
 		try {
 			await channel.assertQueue(REGISTER.name);
-			await channel.sendToQueue(REGISTER.name, Buffer.from(req.body, 'utf8'));
+			await channel.sendToQueue(REGISTER.name, Buffer.from(JSON.stringify(req.body), 'utf8'));
 			await channel.assertQueue(REGISTER.consume);
 			channel.consume(REGISTER.consume, (msg) => {
 				const result = JSON.parse(msg.content);

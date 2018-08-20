@@ -7,8 +7,9 @@ export const doLogout = async (dispatch, logoutRequest = true) => {
     dispatch({
         type: actionTypes.LOGOUT_USER
     });
-    Network.setPath('logout');
-    const response = await Network.post();
+    const response = await Network.post({
+		url: 'logout'
+	});
     if(response.error) {
         return dispatch({
             type: actionTypes.LOGOUT_USER_FAIL,
@@ -25,8 +26,8 @@ export const loginUser = (email, password) => async (dispatch) => {
 	dispatch({
 		type: actionTypes.LOGIN_USER
 	});
-    Network.setPath('login');
     const response = await Network.post({
+		url: 'login',
         data: {
             email,
             password
@@ -51,8 +52,8 @@ export const registerUser = (firstName, lastName, email, password) => async (dis
 	dispatch({
 		type: actionTypes.REGISTER_USER
 	});
-	Network.setPath('register');
 	const response = await Network.post({
+		url: 'register',
 		data: {
 			firstName,
 			lastName,

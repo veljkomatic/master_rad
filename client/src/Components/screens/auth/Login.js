@@ -15,10 +15,10 @@ class Login extends PureComponent  {
     
         this.handlePassChange = this.handlePassChange.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
     
-    handleSubmit() {
+    handleSubmit = (event) => {
+		event.preventDefault();
         const { email, password } = this.state;
         this.props.loginUser(email, password);
     }

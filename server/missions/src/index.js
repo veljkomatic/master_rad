@@ -12,14 +12,14 @@ app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
-require('./controllers');
+require('./controllers')();
 
 module.exports = app;
 
-const server = app.listen(process.env.SERVICE_PORT_ENV_NAME || 3010);
+const server = app.listen(3400);
 
 server.on('listening', async () => {
 	const greenTaxiTripData = await missionsServices.parseAndSortCsvFile();
 	client.set("greenTaxiTripData", JSON.stringify(greenTaxiTripData), redis.print);
-	console.log(`Express application started ${process.env.SERVICE_PORT_ENV_NAME || 3010}`)
+	console.log(`Express application started 3400`)
 });
