@@ -17,10 +17,11 @@ class Login extends PureComponent  {
         this.handleEmailChange = this.handleEmailChange.bind(this);
     }
     
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
 		event.preventDefault();
         const { email, password } = this.state;
-        this.props.loginUser(email, password);
+        await this.props.loginUser(email, password);
+        this.props.history.push('/map')
     }
 
     handleEmailChange(evt) {

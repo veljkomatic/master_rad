@@ -3,9 +3,9 @@ module.exports = ({ io, channel }) => {
         await channel.assertQueue('missionsSubscribe');
         await channel.assertQueue('finishedMission');
         await channel.assertQueue('startingMission')
-        socket.on('missionsSubscribe', async () => {
+        socket.on('missionsSubscribe', async (token) => {
             try {
-                await channel.sendToQueue('missionsSubscribe');
+                await channel.sendToQueue('missionsSubscribe', Buffer.from(JSON.stringify(token), 'utf8'));
                 channel.consume('startingMission', (msg) => {
                     socket.emit('startingMission', JSON.parse(msg.content))
                 });

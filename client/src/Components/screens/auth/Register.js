@@ -21,10 +21,11 @@ class Register extends PureComponent  {
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
     }
     
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
         const { firstName, lastName, email, password } = this.state;
-        this.props.registerUser(firstName, lastName, email, password);
+        await this.props.registerUser(firstName, lastName, email, password);
+        this.props.history.push('/map')
     }
 
     handleFirstNameChange(evt) {

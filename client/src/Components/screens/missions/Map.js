@@ -42,7 +42,8 @@ class Map extends PureComponent  {
 
 const mapStyle = {
     height: '1000px',
-    width: '100%'
+    width: '100%',
+    filter: 'none !important'
 }
 
 

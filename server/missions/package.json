@@ -22,6 +22,7 @@
     "ejs": "^2.5.7",
     "express": "^4.15.5",
     "fast-csv": "^2.4.1",
+    "jsonwebtoken": "^8.3.0",
     "redis": "^2.8.0",
     "uniqid": "^5.0.3",
     "util.promisify": "^1.0.0",

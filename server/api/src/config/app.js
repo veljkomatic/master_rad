@@ -1,26 +1,21 @@
-const express = require('express');
+const app = require('express')();
 const bodyParser = require('body-parser');
-const httpServer = require('http');
-const socketIO = require('socket.io');
+const httpServer = require('http').Server(app)
+const io = require('socket.io').listen(httpServer);;
 const cors = require('cors');
 
 const errorMap = require('./errorMap');
 
-const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors('*'));
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
 
 app.use((err, req, res, next) => {
   const e = errorMap(err);
   res.status(e.httpStatus).send({ error: e.message });
 });
 
-const server = httpServer.Server(app);
-const io = socketIO.listen(httpServer)
-
 require('../controllers')({ router: app, io });
 
-module.exports = server;
+module.exports = httpServer;
