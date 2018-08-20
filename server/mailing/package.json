@@ -1,0 +1,31 @@
+{
+  "name": "missions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha --compilers js:babel-core/register --recursive  tests",
+    "start": "./scripts/dev.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.5.2",
+    "body-parser": "^1.17.2",
+    "ejs": "^2.5.7",
+    "express": "^4.15.5",
+    "winston": "^2.4.3",
+    "sendgrid": "^5.2.3"
+  },
+  "devDependencies": {
+    "expect": "^22.4.3",
+    "mocha": "^5.1.0",
+    "sinon": "^4.5.0",
+    "sinon-stub-promise": "^4.0.0",
+    "supersamples": "^1.4.0",
+    "supertest": "^3.0.0"
+  }
+}

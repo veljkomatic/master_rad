@@ -17,9 +17,18 @@ module.exports = async ({ channel }) => {
 
 	channel.consume('register', async (msg) => {
 		await channel.assertQueue('registerResponse');
+		await channel.assertQueue('emailSend');
 		try {
 			const ctx = sanatize.register(JSON.parse(msg.content));
 			const registered = await authService.registerPost(ctx);
+			channel.sendToQueue('sendEmail', Buffer.from(JSON.stringify({
+				userEmail: registered.email,
+				subject: 'Welcome',
+				fileName: 'welcome_email',
+				data: {
+					user: `${registered.firstName} ${registered.lastName}`
+				}
+			}), 'utf8'));
 			return channel.sendToQueue('registerResponse', Buffer.from(JSON.stringify(registered), 'utf8'));
 		} catch(e) {
 			const error = errorMap(e);
