@@ -13,7 +13,7 @@ module.exports = {
 	sendEmailToUser: (userEmail, subject, fileName, data, extension = '.ejs') => {
 		let renderedHtml;
 		return new Promise(async (resolve, reject) => {
-			fs.readFile(path.join(__dirname, '/emails/', `${fileName}${extension}`), 'utf8', (error, email) => {
+			fs.readFile(path.join(__dirname, '/emails/', `${fileName}${extension}`), 'utf8', async (error, email) => {
 				if (error) {
 					return reject(error);
 				}
