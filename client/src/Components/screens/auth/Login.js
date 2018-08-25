@@ -21,7 +21,9 @@ class Login extends PureComponent  {
 		event.preventDefault();
         const { email, password } = this.state;
         await this.props.loginUser(email, password);
-        this.props.history.push('/map')
+        if(!this.props.error) {
+            this.props.history.push('/map')
+        }
     }
 
     handleEmailChange(evt) {
@@ -61,4 +63,8 @@ const styles = {
     }
 }
 
-export default connect(null, { loginUser })(Login);
+const mapStateToProps = ({ auth }) => ({
+    error: auth.error,
+});
+
+export default connect(mapStateToProps, { loginUser })(Login);

@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import auth from './auth';
-import missions from './auth';
+import missions from './missions';
 
 export default combineReducers({
     auth,

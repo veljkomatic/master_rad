@@ -24,7 +24,6 @@ const fetch = async function (request) {
 
 	try {
 		const response = await axios(request);
-
 		if (response && response.status >= 200 && response.status <= 299) {
 			return response.data;
 		} else if (response && response.status >= 400 && response.status <= 499) {

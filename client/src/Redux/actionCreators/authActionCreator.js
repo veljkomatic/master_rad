@@ -38,14 +38,16 @@ export const loginUser = (email, password) => async (dispatch) => {
             type: actionTypes.LOGIN_USER_FAIL,
 			error: response.error
         });
-    }
-	localStorage.setItem('authToken', response.data.token || '');
-	localStorage.setItem('refreshToken', response.data.refreshToken || '');
+	}
+	localStorage.setItem('authToken', response.token || '');
+	localStorage.setItem('refreshToken', response.refreshToken || '');
     dispatch({
 		type: actionTypes.LOGIN_USER_SUCCESS, 
-		payload: response.data.user
+		payload: response.user
 	});
-    return { response: response.data.user };
+    return {  
+		result: true
+	};
 };
 
 export const registerUser = (firstName, lastName, email, password) => async (dispatch) => {
@@ -68,8 +70,11 @@ export const registerUser = (firstName, lastName, email, password) => async (dis
             error: response.error
 		})
 	}
+	localStorage.setItem('authToken', response.token || '');
+	localStorage.setItem('refreshToken', response.refreshToken || '');
 	dispatch({
-		type: actionTypes.REGISTER_USER_SUCCESS
+		type: actionTypes.REGISTER_USER_SUCCESS,
+		payload: response.user
 	});
 	return {
 		result: true

@@ -38,6 +38,7 @@ export default (state = INITIAL_STATE, action) => {
 				...state,
 				error: '',
 				loading: false,
+				user: action.payload
 			};
 		case actionTypes.REGISTER_USER_FAIL:
 			return {

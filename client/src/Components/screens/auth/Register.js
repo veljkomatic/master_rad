@@ -25,7 +25,9 @@ class Register extends PureComponent  {
         event.preventDefault();
         const { firstName, lastName, email, password } = this.state;
         await this.props.registerUser(firstName, lastName, email, password);
-        this.props.history.push('/map')
+        if(!this.props.error) {
+            this.props.history.push('/map');
+        }
     }
 
     handleFirstNameChange(evt) {
@@ -79,4 +81,8 @@ const styles = {
     }
 }
 
-export default connect(null, { registerUser })(Register);
+const mapStateToProps = ({ auth }) => ({
+    error: auth.error,
+});
+
+export default connect(mapStateToProps, { registerUser })(Register);
